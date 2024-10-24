@@ -25,7 +25,7 @@ const UserSchema= new Schema(
         trim: true,
         index: true
      },
-     avtar:{
+     avatar:{
         type: String, // cloudnary url
         required: true
 
@@ -64,7 +64,7 @@ UserSchema.methods.isPasswordCorrect = async function(password){
 }
 
 UserSchema.methods.generateAccessToken= function(){
-    jwt.sign(
+    return jwt.sign(
       {
          _id: this._id,
          email: this.email,
@@ -76,11 +76,18 @@ UserSchema.methods.generateAccessToken= function(){
          expiresIn: process.env.ACCESS_TOKEN_EXPIRY
       }
     )
-
 }
 
 UserSchema.methods.generateRefrehToken= function(){
-
+   return jwt.sign(
+      {
+         _id: this._id,
+      },
+      process.env.REFRESH_TOKEN_SECRET,
+      {
+         expiresIn: process.env.REFRESH_TOKEN_EXPIRY
+      }
+    )
 
 }
 
